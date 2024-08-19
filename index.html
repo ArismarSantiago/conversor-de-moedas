@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Moedas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            box-sizing: border-box;
+        }
+
+
+        .converter button:hover {
+    background-color: #ffbb00;
+    color: white;
+} 
+        .converter {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .converter select, .converter input {
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .converter button {
+            padding: 10px 20px;
+    background-color: #ffffff;
+    color: #000;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    border: 1px solid;
+    width: 200px;
+}
+        
+        .converter button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="converter">
+    <h1>Conversor de Moedas</h1>
+    <input type="number" id="amount" placeholder="Valor" required>
+    <br>
+    <select id="fromCurrency">
+        <option value="USD">USD - Dólar Americano</option>
+        <option value="BRL">BRL - Real Brasileiro</option>
+        <option value="EUR">EUR - Euro</option>
+        <!-- Adicione mais opções de moedas conforme necessário -->
+    </select>
+    <br>
+    <select id="toCurrency">
+        <option value="BRL">BRL - Real Brasileiro</option>
+        <option value="USD">USD - Dólar Americano</option>
+        <option value="EUR">EUR - Euro</option>
+        <!-- Adicione mais opções de moedas conforme necessário -->
+    </select>
+    <br>
+    <button onclick="convertCurrency()">Converter</button>
+    <h2 id="result"></h2>
+</div>
+
+<script>
+    function convertCurrency() {
+        const amount = document.getElementById('amount').value;
+        const fromCurrency = document.getElementById('fromCurrency').value;
+        const toCurrency = document.getElementById('toCurrency').value;
+
+        var myHeaders = new Headers();
+        myHeaders.append("apikey", "N1o2CROdOkIKGm5k7OTrr8wgD1BbTDO1");
+
+        var requestOptions = {
+            method: 'GET',
+            redirect: 'follow',
+            headers: myHeaders
+        };
+
+        fetch(`https://api.apilayer.com/exchangerates_data/convert?to=${toCurrency}&from=${fromCurrency}&amount=${amount}`, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                const convertedAmount = result.result.toFixed(2);
+                document.getElementById('result').innerText = `${amount} ${fromCurrency} = ${convertedAmount} ${toCurrency}`;
+            })
+            .catch(error => {
+                console.log('error', error);
+                document.getElementById('result').innerText = 'Não foi possível realizar a conversão.';
+            });
+    }
+</script>
+
+</body>
+</html>
